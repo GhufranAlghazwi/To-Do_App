@@ -138,12 +138,35 @@ class HomeActivity : AppCompatActivity() {
         super.onResume()
         //Tasks List
         var taskList = mutableListOf<Task>()
-
         //Link RV to its adapter
         var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        //mRecyclerView.adapter = TaskAdapter(taskList)
+        //initialize db
+        val db = Firebase.firestore
 
+        //Create a collection
+        db.collection("Tasks")
+            .get().addOnSuccessListener { result: QuerySnapshot ->
+                for (document in result) {
+                    taskList.add(
+                        Task(document.id,
+                            document.getString("taskName")!!, document.getString("taskNote")!!,
+                            document.getString("dueDate")!!, document.getString("CreationDate")!!
+                        )
+                    )
+                }
+                mRecyclerView.adapter = TaskAdapter(taskList)
+                mRecyclerView.adapter?.notifyDataSetChanged()
+            }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        //Tasks List
+        var taskList = mutableListOf<Task>()
+        //Link RV to its adapter
+        var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
+        mRecyclerView.layoutManager = LinearLayoutManager(this)
         //initialize db
         val db = Firebase.firestore
 

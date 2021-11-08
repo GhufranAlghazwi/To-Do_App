@@ -1,8 +1,10 @@
 package com.example.to_doapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -15,6 +17,20 @@ class TaskDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_details)
+
+        //Toolbar part
+//        var mToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.mdToolbar)
+//        mToolbar.title=""
+//        mToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_24)
+//        setSupportActionBar(mToolbar)
+//        mToolbar.setNavigationOnClickListener {
+//            finish()
+//        }
+
+        var backIcon = findViewById<ImageView>(R.id.backNavigation)
+        backIcon.setOnClickListener {
+            finish()
+        }
 
         var task = intent.getSerializableExtra("task") as Task
 
@@ -35,7 +51,6 @@ class TaskDetails : AppCompatActivity() {
             .get()
 
         var deleteBtn = findViewById<Button>(R.id.buttonDelete)
-//        var currentTask= db.collection("Tasks").
         deleteBtn.setOnClickListener {
             var deleteConfirmDialog = AlertDialog.Builder(this)
                 .setTitle("Delete Task")
@@ -56,6 +71,13 @@ class TaskDetails : AppCompatActivity() {
                 }
                 .setIcon(R.drawable.ic_baseline_delete_24)
                 .show()
+        }
+
+        var editBtn = findViewById<Button>(R.id.buttonEdit)
+        editBtn.setOnClickListener {
+            var intent = Intent(this,EditTask::class.java)
+            intent.putExtra("task",task)
+            startActivity(intent)
         }
     }
 }

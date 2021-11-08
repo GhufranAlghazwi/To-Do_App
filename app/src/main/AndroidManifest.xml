@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDoApp">
         <activity
+            android:name=".EditTask"
+            android:exported="false" />
+        <activity
             android:name=".TaskDetails"
             android:exported="false" />
         <activity
