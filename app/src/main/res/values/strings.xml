@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">To-Do App</string>
+    <string name="filter">Filter</string>
+    <string name="task_title">Task Title</string>
+    <string name="notes">Notes</string>
+    <string name="add">Add</string>
+    <string name="due_date">Due Date</string>
+</resources>
