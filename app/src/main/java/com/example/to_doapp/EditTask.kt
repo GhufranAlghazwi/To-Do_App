@@ -24,6 +24,10 @@ class EditTask : AppCompatActivity() {
         back.setOnClickListener {
             finish()
         }
+        //bringing db
+        val db = Firebase.firestore
+        db.collection("Tasks")
+            .get()
 
         var task = intent.getSerializableExtra("task") as com.example.to_doapp.model.Task
 
@@ -52,32 +56,29 @@ class EditTask : AppCompatActivity() {
                     editDateEditText.setText(selectedDate)
                 }
 
-                val db = Firebase.firestore
-                db.collection("Tasks")
-                    .get()
 
-                var editBtn = findViewById<Button>(R.id.buttonEditTask)
-                editBtn.setOnClickListener {
-                    db.collection("Tasks").document(task.id!!)
-                        .update(
-                            mapOf(
-                                "taskName" to editTitleEditText.text.toString()!!,
-                                "taskNote" to editNotesEditText.text.toString()!!,
-                                "dueDate" to editDateEditText?.text.toString()!!,
-                                "CreationDate" to "SSS"
-                            )
-                        ).addOnSuccessListener {
-                            Toast.makeText(this, "Task updated successfully", Toast.LENGTH_LONG)
-                                .show()
-                            var intent = Intent(this, HomeActivity::class.java)
-                            startActivity(intent)
-                        }.addOnFailureListener {
-                            Toast.makeText(this, "${it.message}", Toast.LENGTH_LONG).show()
-                        }
                 }
-
-
             }
+
+        var editBtn = findViewById<Button>(R.id.buttonEditTask)
+        editBtn.setOnClickListener {
+            db.collection("Tasks").document(task.id!!)
+                .update(
+                    mapOf(
+                        "taskName" to editTitleEditText.text.toString()!!,
+                        "taskNote" to editNotesEditText.text.toString()!!,
+                        "dueDate" to editDateEditText?.text.toString()!!,
+                        "CreationDate" to "SSS"
+                    )
+                ).addOnSuccessListener {
+                    Toast.makeText(this, "Task updated successfully", Toast.LENGTH_LONG)
+                        .show()
+                    var intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
+                }.addOnFailureListener {
+                    Toast.makeText(this, "${it.message}", Toast.LENGTH_LONG).show()
+                }
         }
+
     }
 }

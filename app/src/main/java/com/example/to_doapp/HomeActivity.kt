@@ -46,9 +46,13 @@ class HomeActivity : AppCompatActivity() {
             .get().addOnSuccessListener { result: QuerySnapshot ->
                 for (document in result) {
                     taskList.add(
-                        Task(document.id,
-                            document.getString("taskName")!!, document.getString("taskNote")!!,
-                            document.getString("dueDate")!!, document.getString("CreationDate")!!
+                        Task(
+                            document.id,
+                            document.getString("taskName")!!,
+                            document.getString("taskNote")!!,
+                            document.getString("dueDate")!!,
+                            document.getString("CreationDate")!!,
+                            document.getBoolean("status")!!
                         )
                     )
                 }
@@ -84,48 +88,48 @@ class HomeActivity : AppCompatActivity() {
                         date.setText(selectedDate)
                     }
 
-                    var dialogAddButton = addTaskDialogView.findViewById<Button>(R.id.buttonAdd)
-                    //Add btn in the dialog
-                    dialogAddButton.setOnClickListener {
-                        var taskTitle =
-                            addTaskCustomDialog.findViewById<EditText>(R.id.inputTaskTitle)?.text.toString()
-                        var taskNotes =
-                            addTaskCustomDialog.findViewById<EditText>(R.id.inputTaskNotes)?.text.toString()
-                        var dueDate =
-                            addTaskCustomDialog.findViewById<EditText>(R.id.inputDueDate)?.text.toString()
-
-                        if (taskTitle.isEmpty() || taskNotes.isEmpty() || dueDate.isEmpty()) {
-                            addTaskCustomDialog.dismiss()
-                            Toast.makeText(this, "fill all the fields", Toast.LENGTH_LONG).show()
-                        }
-                        else {
-                            val task = hashMapOf(
-                                "taskName" to taskTitle,
-                                "taskNote" to taskNotes,
-                                "dueDate" to dueDate,
-                                "CreationDate" to "SSS"
-                            )
-                            db.collection("Tasks")
-                                .add(task)
-                                .addOnSuccessListener {
-                                    Toast.makeText(this, "task has been added", Toast.LENGTH_SHORT)
-                                        .show()
-                                    mRecyclerView.adapter?.notifyDataSetChanged()
-                                }
-                                .addOnFailureListener { e ->
-                                    Toast.makeText(
-                                        this,
-                                        "something went wrong! ${e.message}",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                        }
-                        addTaskCustomDialog.dismiss()
-                        //onResume()
-                    }
-
 
                 }
+
+            }
+            var dialogAddButton = addTaskDialogView.findViewById<Button>(R.id.buttonAdd)
+            //Add btn in the dialog
+            dialogAddButton.setOnClickListener {
+                var taskTitle =
+                    addTaskCustomDialog.findViewById<EditText>(R.id.inputTaskTitle)?.text.toString()
+                var taskNotes =
+                    addTaskCustomDialog.findViewById<EditText>(R.id.inputTaskNotes)?.text.toString()
+                var dueDate =
+                    addTaskCustomDialog.findViewById<EditText>(R.id.inputDueDate)?.text.toString()
+
+                if (taskTitle.isEmpty() || taskNotes.isEmpty() || dueDate.isEmpty()) {
+                    Toast.makeText(this, "fill all the fields", Toast.LENGTH_LONG).show()
+                } else {
+                    val task = hashMapOf(
+                        "taskName" to taskTitle,
+                        "taskNote" to taskNotes,
+                        "dueDate" to dueDate,
+                        "CreationDate" to "SSS",
+                        "status" to false
+                    )
+                    db.collection("Tasks")
+                        .add(task)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "task has been added", Toast.LENGTH_SHORT)
+                                .show()
+                            addTaskCustomDialog.dismiss()
+                            onResume()
+                            mRecyclerView.adapter?.notifyDataSetChanged()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(
+                                this,
+                                "something went wrong! ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                }
+
 
             }
 
@@ -149,9 +153,13 @@ class HomeActivity : AppCompatActivity() {
             .get().addOnSuccessListener { result: QuerySnapshot ->
                 for (document in result) {
                     taskList.add(
-                        Task(document.id,
-                            document.getString("taskName")!!, document.getString("taskNote")!!,
-                            document.getString("dueDate")!!, document.getString("CreationDate")!!
+                        Task(
+                            document.id,
+                            document.getString("taskName")!!,
+                            document.getString("taskNote")!!,
+                            document.getString("dueDate")!!,
+                            document.getString("CreationDate")!!,
+                            document.getBoolean("status")!!
                         )
                     )
                 }
@@ -175,9 +183,13 @@ class HomeActivity : AppCompatActivity() {
             .get().addOnSuccessListener { result: QuerySnapshot ->
                 for (document in result) {
                     taskList.add(
-                        Task(document.id,
-                            document.getString("taskName")!!, document.getString("taskNote")!!,
-                            document.getString("dueDate")!!, document.getString("CreationDate")!!
+                        Task(
+                            document.id,
+                            document.getString("taskName")!!,
+                            document.getString("taskNote")!!,
+                            document.getString("dueDate")!!,
+                            document.getString("CreationDate")!!,
+                            document.getBoolean("status")!!
                         )
                     )
                 }
