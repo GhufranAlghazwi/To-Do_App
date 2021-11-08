@@ -1,5 +1,6 @@
 package com.example.to_doapp
 
+import android.content.Intent
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +8,7 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import java.text.DateFormat
-import java.util.*
+import com.example.to_doapp.model.Task
 
 class TaskAdapter(var data: List<Task>):RecyclerView.Adapter<TaskHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskHolder {
@@ -26,6 +26,13 @@ class TaskAdapter(var data: List<Task>):RecyclerView.Adapter<TaskHolder>() {
         holder.doneBtn.setOnClickListener{
             if (holder.doneBtn.isChecked)
                 holder.tvTitle.paintFlags = holder.tvTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG
+        }
+
+        holder.itemView.setOnClickListener {
+            var intent = Intent(holder.itemView.context, TaskDetails::class.java)
+            var task = data[position]
+            intent.putExtra("task",data[position])
+            holder.itemView.context.startActivity(intent)
         }
     }
 

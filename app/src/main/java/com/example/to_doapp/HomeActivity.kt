@@ -1,15 +1,14 @@
 package com.example.to_doapp
 
-import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.to_doapp.model.Task
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -17,9 +16,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
             .get().addOnSuccessListener { result: QuerySnapshot ->
                 for (document in result) {
                     taskList.add(
-                        Task(
+                        Task(document.id,
                             document.getString("taskName")!!, document.getString("taskNote")!!,
                             document.getString("dueDate")!!, document.getString("CreationDate")!!
                         )
@@ -133,20 +129,6 @@ class HomeActivity : AppCompatActivity() {
 
             }
 
-//            date.setOnClickListener {
-//                //Toast.makeText(this, "Date edit text clicked!", Toast.LENGTH_SHORT).show()
-//                // Makes only dates from today forward selectable.
-//                var constraintsBuilder = CalendarConstraints.Builder()
-//                    .setValidator(DateValidatorPointForward.now())
-//                val datePicker = MaterialDatePicker.Builder.datePicker()
-//                    .setTitleText("Select task due date")
-//                    // Opens the date picker with today's date selected.
-//                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-//                    .setCalendarConstraints(constraintsBuilder.build())
-//                    .build()
-//                datePicker.show(supportFragmentManager, "date_picker")
-//                var selected = datePicker.selection.toString() as Editable
-//            }
         }
 
 
@@ -170,7 +152,7 @@ class HomeActivity : AppCompatActivity() {
             .get().addOnSuccessListener { result: QuerySnapshot ->
                 for (document in result) {
                     taskList.add(
-                        Task(
+                        Task(document.id,
                             document.getString("taskName")!!, document.getString("taskNote")!!,
                             document.getString("dueDate")!!, document.getString("CreationDate")!!
                         )
