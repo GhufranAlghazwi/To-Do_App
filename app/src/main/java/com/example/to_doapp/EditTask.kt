@@ -57,27 +57,34 @@ class EditTask : AppCompatActivity() {
                 }
 
 
-                }
             }
+        }
 
         var editBtn = findViewById<Button>(R.id.buttonEditTask)
         editBtn.setOnClickListener {
-            db.collection("Tasks").document(task.id!!)
-                .update(
-                    mapOf(
-                        "taskName" to editTitleEditText.text.toString()!!,
-                        "taskNote" to editNotesEditText.text.toString()!!,
-                        "dueDate" to editDateEditText?.text.toString()!!,
-                        "CreationDate" to "SSS"
-                    )
-                ).addOnSuccessListener {
-                    Toast.makeText(this, "Task updated successfully", Toast.LENGTH_LONG)
-                        .show()
-                    var intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                }.addOnFailureListener {
-                    Toast.makeText(this, "${it.message}", Toast.LENGTH_LONG).show()
-                }
+            if (editTitleEditText.toString().isEmpty() || editDateEditText.toString()
+                    .isEmpty() || editNotesEditText.toString().isEmpty()
+            ) {
+                Toast.makeText(this, "fill all the fields", Toast.LENGTH_LONG).show()
+            } else {
+                db.collection("Tasks").document(task.id!!)
+                    .update(
+                        mapOf(
+                            "taskName" to editTitleEditText.text.toString()!!,
+                            "taskNote" to editNotesEditText.text.toString()!!,
+                            "dueDate" to editDateEditText?.text.toString()!!,
+                            "CreationDate" to task.creationDate
+                        )
+                    ).addOnSuccessListener {
+                        Toast.makeText(this, "Task updated successfully", Toast.LENGTH_LONG)
+                            .show()
+                        var intent = Intent(this, HomeActivity::class.java)
+                        startActivity(intent)
+                    }.addOnFailureListener {
+                        Toast.makeText(this, "${it.message}", Toast.LENGTH_LONG).show()
+                    }
+            }
+
         }
 
     }

@@ -1,10 +1,12 @@
 package com.example.to_doapp
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,8 +18,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class HomeActivity : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -30,6 +37,11 @@ class HomeActivity : AppCompatActivity() {
         mToolbar.setNavigationOnClickListener {
             finish()
         }
+
+        //current date
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+        val currentDate = current.format(formatter).toString()
 
         //Tasks List
         var taskList = mutableListOf<Task>()
@@ -109,7 +121,7 @@ class HomeActivity : AppCompatActivity() {
                         "taskName" to taskTitle,
                         "taskNote" to taskNotes,
                         "dueDate" to dueDate,
-                        "CreationDate" to "SSS",
+                        "CreationDate" to currentDate,
                         "status" to false
                     )
                     db.collection("Tasks")

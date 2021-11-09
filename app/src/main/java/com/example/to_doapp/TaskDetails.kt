@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.core.graphics.toColorInt
 import com.example.to_doapp.model.Task
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -17,15 +18,6 @@ class TaskDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_details)
-
-        //Toolbar part
-//        var mToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.mdToolbar)
-//        mToolbar.title=""
-//        mToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_24)
-//        setSupportActionBar(mToolbar)
-//        mToolbar.setNavigationOnClickListener {
-//            finish()
-//        }
 
         var backIcon = findViewById<ImageView>(R.id.backNavigation)
         backIcon.setOnClickListener {
@@ -39,16 +31,22 @@ class TaskDetails : AppCompatActivity() {
 
         var title = findViewById<TextView>(R.id.txtCardTaskTitle)
         var date = findViewById<TextView>(R.id.textViewDetailsDate)
+//        var status = findViewById<TextView>(R.id.textViewStatus)
         var notes = findViewById<TextView>(R.id.textViewDetailsNotes)
 
         title.text = task.title
         date.text = task.dueDate
         notes.text = task.notes
 
+//        if (task.status)
+//            status.text="Completed"
+//        else
+//            status.text="Uncompleted"
+
         //bring db
         val db = Firebase.firestore
-        db.collection("Tasks")
-            .get()
+//        db.collection("Tasks")
+//            .get()
 
         var deleteBtn = findViewById<Button>(R.id.buttonDelete)
         deleteBtn.setOnClickListener {

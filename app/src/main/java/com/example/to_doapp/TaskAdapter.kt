@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -30,17 +31,31 @@ class TaskAdapter(var data: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
         holder.tvDueDate.text = data[position].dueDate
         holder.tvCreationDate.text = "Created:\n" + data[position].creationDate.toString()
 
-
         if (data[position].status) {
-            holder.doneBtn.isChecked=true
-            holder.tvTitle.paintFlags = holder.tvTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG
+            holder.doneBtn.isChecked = true
+            holder.tvTitle.paintFlags =
+                holder.tvTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG
         } else {
-            holder.doneBtn.isChecked=false
+            holder.doneBtn.isChecked = false
+            holder.tvTitle.paintFlags =
+                holder.tvTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
-        holder.doneBtn.setOnClickListener {
-            db.collection("Tasks").document(data[position].id!!)
-                .update("status", true)
-            holder.tvTitle.paintFlags = holder.tvTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG
+
+        holder.doneBtn.setOnCheckedChangeListener { compoundButton, b ->
+            if (compoundButton.isChecked) {
+                db.collection("Tasks").document(data[position].id!!)
+                    .update("status", true)
+                compoundButton.isChecked = true
+                holder.tvTitle.paintFlags =
+                    holder.tvTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG
+            } else {
+                db.collection("Tasks").document(data[position].id!!)
+                    .update("status", false)
+                compoundButton.isChecked = false
+                holder.tvTitle.paintFlags =
+                    holder.tvTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+
+            }
         }
 
         holder.itemView.setOnClickListener {
@@ -62,5 +77,5 @@ class TaskHolder(v: View) : RecyclerView.ViewHolder(v) {
     var tvNotes = v.findViewById<TextView>(R.id.textViewNotes)
     var tvDueDate = v.findViewById<TextView>(R.id.textViewDate)
     var tvCreationDate = v.findViewById<TextView>(R.id.textViewCreationDate)
-    var doneBtn = v.findViewById<RadioButton>(R.id.doneRadioBtn)
+    var doneBtn = v.findViewById<CheckBox>(R.id.doneCheckbox)
 }
