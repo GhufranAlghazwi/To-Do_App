@@ -43,34 +43,18 @@ class HomeActivity : AppCompatActivity() {
         val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
         val currentDate = current.format(formatter).toString()
 
-        //Tasks List
-        var taskList = mutableListOf<Task>()
+        var homeVM = HomeViewModel()
 
-        //Link RV to its adapter
+        //identify RV layout
         var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        //initialize db
-        val db = Firebase.firestore
+        homeVM.getAllTasks().observe(this, { list ->
+            mRecyclerView.adapter = TaskAdapter(list)
+            mRecyclerView.adapter?.notifyDataSetChanged()
 
-        //Create a collection
-        db.collection("Tasks")
-            .get().addOnSuccessListener { result: QuerySnapshot ->
-                for (document in result) {
-                    taskList.add(
-                        Task(
-                            document.id,
-                            document.getString("taskName")!!,
-                            document.getString("taskNote")!!,
-                            document.getString("dueDate")!!,
-                            document.getString("CreationDate")!!,
-                            document.getBoolean("status")!!
-                        )
-                    )
-                }
-                mRecyclerView.adapter = TaskAdapter(taskList)
-                mRecyclerView.adapter?.notifyDataSetChanged()
-            }
+        })
+        mRecyclerView.adapter?.notifyDataSetChanged()
 
 
         //Floating Btn to add task
@@ -107,6 +91,7 @@ class HomeActivity : AppCompatActivity() {
             var dialogAddButton = addTaskDialogView.findViewById<Button>(R.id.buttonAdd)
             //Add btn in the dialog
             dialogAddButton.setOnClickListener {
+                var db = Firebase.firestore
                 var taskTitle =
                     addTaskCustomDialog.findViewById<EditText>(R.id.inputTaskTitle)?.text.toString()
                 var taskNotes =
@@ -152,62 +137,35 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        //Tasks List
-        var taskList = mutableListOf<Task>()
-        //Link RV to its adapter
+        var homeVM = HomeViewModel()
+
+        //identify RV layout
         var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        //initialize db
-        val db = Firebase.firestore
+        mRecyclerView.adapter?.notifyDataSetChanged()
 
-        //Create a collection
-        db.collection("Tasks")
-            .get().addOnSuccessListener { result: QuerySnapshot ->
-                for (document in result) {
-                    taskList.add(
-                        Task(
-                            document.id,
-                            document.getString("taskName")!!,
-                            document.getString("taskNote")!!,
-                            document.getString("dueDate")!!,
-                            document.getString("CreationDate")!!,
-                            document.getBoolean("status")!!
-                        )
-                    )
-                }
-                mRecyclerView.adapter = TaskAdapter(taskList)
-                mRecyclerView.adapter?.notifyDataSetChanged()
-            }
+        homeVM.getAllTasks().observe(this, { list ->
+            mRecyclerView.adapter = TaskAdapter(list)
+            mRecyclerView.adapter?.notifyDataSetChanged()
+        })
+
     }
+
 
     override fun onRestart() {
         super.onRestart()
-        //Tasks List
-        var taskList = mutableListOf<Task>()
-        //Link RV to its adapter
+
+        var homeVM = HomeViewModel()
+
+        //identify RV layout
         var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        //initialize db
-        val db = Firebase.firestore
+        mRecyclerView.adapter?.notifyDataSetChanged()
 
-        //Create a collection
-        db.collection("Tasks")
-            .get().addOnSuccessListener { result: QuerySnapshot ->
-                for (document in result) {
-                    taskList.add(
-                        Task(
-                            document.id,
-                            document.getString("taskName")!!,
-                            document.getString("taskNote")!!,
-                            document.getString("dueDate")!!,
-                            document.getString("CreationDate")!!,
-                            document.getBoolean("status")!!
-                        )
-                    )
-                }
-                mRecyclerView.adapter = TaskAdapter(taskList)
-                mRecyclerView.adapter?.notifyDataSetChanged()
-            }
+        homeVM.getAllTasks().observe(this, { list ->
+            mRecyclerView.adapter = TaskAdapter(list)
+            mRecyclerView.adapter?.notifyDataSetChanged()
+        })
     }
 
     //menu options\btns
@@ -219,6 +177,20 @@ class HomeActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.filter_item -> {
+                super.onResume()
+                var homeVM = HomeViewModel()
+
+                //identify RV layout
+                var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
+                mRecyclerView.layoutManager = LinearLayoutManager(this)
+                mRecyclerView.adapter?.notifyDataSetChanged()
+
+                homeVM.sortTask().observe(this, { list ->
+                    mRecyclerView.adapter = TaskAdapter(list)
+                    mRecyclerView.adapter?.notifyDataSetChanged()
+
+                })
+
                 Toast.makeText(this, "Filter item clicked", Toast.LENGTH_SHORT).show()
             }
         }

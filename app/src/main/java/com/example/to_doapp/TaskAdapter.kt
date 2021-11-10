@@ -31,39 +31,38 @@ class TaskAdapter(var data: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
         holder.tvDueDate.text = data[position].dueDate
         holder.tvCreationDate.text = "Created:\n" + data[position].creationDate.toString()
 
-        if (data[position].status) {
-            holder.doneBtn.isChecked = true
-            holder.tvTitle.paintFlags =
-                holder.tvTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG
-        } else {
+        holder.itemView.setOnClickListener {
+            var intent = Intent(holder.itemView.context, TaskDetails::class.java)
+            intent.putExtra("task", data[position])
+            holder.itemView.context.startActivity(intent)
+        }
+
+        if (!data[position].status) {
             holder.doneBtn.isChecked = false
             holder.tvTitle.paintFlags =
                 holder.tvTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+        } else {
+            holder.doneBtn.isChecked
+            holder.tvTitle.paintFlags =
+                holder.tvTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG
         }
 
         holder.doneBtn.setOnCheckedChangeListener { compoundButton, b ->
-            if (compoundButton.isChecked) {
+            if (b) {
                 db.collection("Tasks").document(data[position].id!!)
                     .update("status", true)
-                compoundButton.isChecked = true
                 holder.tvTitle.paintFlags =
                     holder.tvTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG
             } else {
                 db.collection("Tasks").document(data[position].id!!)
                     .update("status", false)
-                compoundButton.isChecked = false
+                !compoundButton.isChecked
                 holder.tvTitle.paintFlags =
                     holder.tvTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-
             }
         }
 
-        holder.itemView.setOnClickListener {
-            var intent = Intent(holder.itemView.context, TaskDetails::class.java)
-            var task = data[position]
-            intent.putExtra("task", data[position])
-            holder.itemView.context.startActivity(intent)
-        }
+
     }
 
     override fun getItemCount(): Int {
