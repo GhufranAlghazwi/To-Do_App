@@ -66,4 +66,29 @@ class HomeViewModel() : ViewModel() {
             }
         return mutableLiveData
     }
+
+    fun filterUncompleted():MutableLiveData<MutableList<Task>>{
+        var mutableLiveData = MutableLiveData<MutableList<Task>>()
+
+        //Create a collection
+        db.collection("Tasks").whereEqualTo("status",false)
+            .get()
+            .addOnSuccessListener { result: QuerySnapshot ->
+                var taskList = mutableListOf<Task>()
+                for (document in result) {
+                    taskList.add(
+                        Task(
+                            document.id,
+                            document.getString("taskName")!!,
+                            document.getString("taskNote")!!,
+                            document.getString("dueDate")!!,
+                            document.getString("CreationDate")!!,
+                            document.getBoolean("status")!!
+                        )
+                    )
+                }
+                mutableLiveData.postValue(taskList)
+            }
+        return mutableLiveData
+    }
 }

@@ -174,10 +174,26 @@ class HomeActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    //Sort and Filter in toolbar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.filter_item -> {
-                super.onResume()
+                var homeVM = HomeViewModel()
+
+                //identify RV layout
+                var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
+                mRecyclerView.layoutManager = LinearLayoutManager(this)
+                mRecyclerView.adapter?.notifyDataSetChanged()
+
+                homeVM.filterUncompleted().observe(this, { list ->
+                    mRecyclerView.adapter = TaskAdapter(list)
+                    mRecyclerView.adapter?.notifyDataSetChanged()
+
+                })
+
+                Toast.makeText(this, "Task filtered", Toast.LENGTH_SHORT).show()
+            }
+            R.id.sort_item -> {
                 var homeVM = HomeViewModel()
 
                 //identify RV layout
@@ -191,7 +207,7 @@ class HomeActivity : AppCompatActivity() {
 
                 })
 
-                Toast.makeText(this, "Filter item clicked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Task are sorted now.", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
