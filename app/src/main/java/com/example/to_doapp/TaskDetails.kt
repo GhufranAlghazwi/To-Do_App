@@ -13,6 +13,7 @@ import androidx.core.graphics.toColorInt
 import com.example.to_doapp.model.Task
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import dev.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog
 
 class TaskDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,31 +51,61 @@ class TaskDetails : AppCompatActivity() {
 
         var deleteBtn = findViewById<Button>(R.id.buttonDelete)
         deleteBtn.setOnClickListener {
-            var deleteConfirmDialog = AlertDialog.Builder(this)
-                .setTitle("Delete Task")
-                .setMessage("Do you want to delete this task?")
-                .setPositiveButton("Yes"){dialog, which ->
+            val mDialog = BottomSheetMaterialDialog.Builder(this)
+                .setTitle("Delete?")
+                .setMessage("Are you sure want to delete this file?")
+                .setCancelable(false)
+                .setPositiveButton(
+                    "Delete", R.drawable.ic_baseline_delete_white
+                ) { dialogInterface, which ->
+                    // Delete Operation
                     db.collection("Tasks").document(task.id!!)
                         .delete()
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Task deleted successfully", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Task deleted successfully", Toast.LENGTH_SHORT)
+                                .show()
                         }
-                        .addOnFailureListener { e->
+                        .addOnFailureListener { e ->
                             Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
                         }
                     finish()
                 }
-                .setNegativeButton("No"){dialog, which ->
-                    dialog.dismiss()
-                }
-                .setIcon(R.drawable.ic_baseline_delete_24)
-                .show()
+                .setNegativeButton(
+                    "Cancel", R.drawable.ic_baseline_close_red
+                ) { dialogInterface, which -> dialogInterface.dismiss() }
+                .build()
+
+            // Show Dialog
+            mDialog.show()
         }
+
+
+//        deleteBtn.setOnClickListener {
+//            var deleteConfirmDialog = AlertDialog.Builder(this)
+//                .setTitle("Delete Task")
+//                .setMessage("Do you want to delete this task?")
+//                .setPositiveButton("Yes"){dialog, which ->
+//                    db.collection("Tasks").document(task.id!!)
+//                        .delete()
+//                        .addOnSuccessListener {
+//                            Toast.makeText(this, "Task deleted successfully", Toast.LENGTH_SHORT).show()
+//                        }
+//                        .addOnFailureListener { e->
+//                            Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
+//                        }
+//                    finish()
+//                }
+//                .setNegativeButton("No"){dialog, which ->
+//                    dialog.dismiss()
+//                }
+//                .setIcon(R.drawable.ic_baseline_delete_24)
+//                .show()
+//        }
 
         var editBtn = findViewById<Button>(R.id.buttonEdit)
         editBtn.setOnClickListener {
-            var intent = Intent(this,EditTask::class.java)
-            intent.putExtra("task",task)
+            var intent = Intent(this, EditTask::class.java)
+            intent.putExtra("task", task)
             startActivity(intent)
         }
     }
