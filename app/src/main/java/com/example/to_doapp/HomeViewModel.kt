@@ -18,24 +18,24 @@ class HomeViewModel() : ViewModel() {
 
         var mutableLiveData = MutableLiveData<MutableList<Task>>()
 
-        //initialize db
-//        val db = Firebase.firestore
-
         //Create a collection
         db.collection("Tasks")
-            .get().addOnSuccessListener { result: QuerySnapshot ->
+            .addSnapshotListener() { result, error ->
                 var taskList = mutableListOf<Task>()
-                for (document in result) {
-                    taskList.add(
-                        Task(
-                            document.id,
-                            document.getString("taskName")!!,
-                            document.getString("taskNote")!!,
-                            document.getString("dueDate")!!,
-                            document.getString("CreationDate")!!,
-                            document.getBoolean("status")!!
+                if (result != null) {
+                    taskList.clear()
+                    for (document in result) {
+                        taskList.add(
+                            Task(
+                                document.id,
+                                document.getString("taskName")!!,
+                                document.getString("taskNote")!!,
+                                document.getString("dueDate")!!,
+                                document.getString("CreationDate")!!,
+                                document.getBoolean("status")!!
+                            )
                         )
-                    )
+                    }
                 }
                 mutableLiveData.postValue(taskList)
             }
@@ -47,20 +47,22 @@ class HomeViewModel() : ViewModel() {
 
         //Create a collection
         db.collection("Tasks").orderBy("taskName",Query.Direction.ASCENDING)
-            .get()
-            .addOnSuccessListener { result: QuerySnapshot ->
+            .addSnapshotListener() { result, error ->
                 var taskList = mutableListOf<Task>()
-                for (document in result) {
-                    taskList.add(
-                        Task(
-                            document.id,
-                            document.getString("taskName")!!,
-                            document.getString("taskNote")!!,
-                            document.getString("dueDate")!!,
-                            document.getString("CreationDate")!!,
-                            document.getBoolean("status")!!
+                if (result != null) {
+                    taskList.clear()
+                    for (document in result) {
+                        taskList.add(
+                            Task(
+                                document.id,
+                                document.getString("taskName")!!,
+                                document.getString("taskNote")!!,
+                                document.getString("dueDate")!!,
+                                document.getString("CreationDate")!!,
+                                document.getBoolean("status")!!
+                            )
                         )
-                    )
+                    }
                 }
                 mutableLiveData.postValue(taskList)
             }
@@ -72,20 +74,22 @@ class HomeViewModel() : ViewModel() {
 
         //Create a collection
         db.collection("Tasks").whereEqualTo("status",false)
-            .get()
-            .addOnSuccessListener { result: QuerySnapshot ->
+            .addSnapshotListener() { result, error ->
                 var taskList = mutableListOf<Task>()
-                for (document in result) {
-                    taskList.add(
-                        Task(
-                            document.id,
-                            document.getString("taskName")!!,
-                            document.getString("taskNote")!!,
-                            document.getString("dueDate")!!,
-                            document.getString("CreationDate")!!,
-                            document.getBoolean("status")!!
+                if (result != null) {
+                    taskList.clear()
+                    for (document in result) {
+                        taskList.add(
+                            Task(
+                                document.id,
+                                document.getString("taskName")!!,
+                                document.getString("taskNote")!!,
+                                document.getString("dueDate")!!,
+                                document.getString("CreationDate")!!,
+                                document.getBoolean("status")!!
+                            )
                         )
-                    )
+                    }
                 }
                 mutableLiveData.postValue(taskList)
             }

@@ -80,27 +80,7 @@ class TaskDetails : AppCompatActivity() {
         }
 
 
-//        deleteBtn.setOnClickListener {
-//            var deleteConfirmDialog = AlertDialog.Builder(this)
-//                .setTitle("Delete Task")
-//                .setMessage("Do you want to delete this task?")
-//                .setPositiveButton("Yes"){dialog, which ->
-//                    db.collection("Tasks").document(task.id!!)
-//                        .delete()
-//                        .addOnSuccessListener {
-//                            Toast.makeText(this, "Task deleted successfully", Toast.LENGTH_SHORT).show()
-//                        }
-//                        .addOnFailureListener { e->
-//                            Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
-//                        }
-//                    finish()
-//                }
-//                .setNegativeButton("No"){dialog, which ->
-//                    dialog.dismiss()
-//                }
-//                .setIcon(R.drawable.ic_baseline_delete_24)
-//                .show()
-//        }
+
 
         var editBtn = findViewById<Button>(R.id.buttonEdit)
         editBtn.setOnClickListener {

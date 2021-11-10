@@ -135,38 +135,6 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        var homeVM = HomeViewModel()
-
-        //identify RV layout
-        var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
-        mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mRecyclerView.adapter?.notifyDataSetChanged()
-
-        homeVM.getAllTasks().observe(this, { list ->
-            mRecyclerView.adapter = TaskAdapter(list)
-            mRecyclerView.adapter?.notifyDataSetChanged()
-        })
-
-    }
-
-
-    override fun onRestart() {
-        super.onRestart()
-
-        var homeVM = HomeViewModel()
-
-        //identify RV layout
-        var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
-        mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mRecyclerView.adapter?.notifyDataSetChanged()
-
-        homeVM.getAllTasks().observe(this, { list ->
-            mRecyclerView.adapter = TaskAdapter(list)
-            mRecyclerView.adapter?.notifyDataSetChanged()
-        })
-    }
 
     //menu options\btns
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
