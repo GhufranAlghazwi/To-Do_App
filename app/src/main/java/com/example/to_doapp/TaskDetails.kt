@@ -32,22 +32,20 @@ class TaskDetails : AppCompatActivity() {
 
         var title = findViewById<TextView>(R.id.txtCardTaskTitle)
         var date = findViewById<TextView>(R.id.textViewDetailsDate)
-//        var status = findViewById<TextView>(R.id.textViewStatus)
+        var status = findViewById<TextView>(R.id.textViewStatus)
         var notes = findViewById<TextView>(R.id.textViewDetailsNotes)
 
-        title.text = task.title
-        date.text = task.dueDate
+        title.text = task.title.capitalize()
+        date.text = task.dueDate.toString()
         notes.text = task.notes
 
-//        if (task.status)
-//            status.text="Completed"
-//        else
-//            status.text="Uncompleted"
+        if (task.status)
+            status.text="Completed"
+        else
+            status.text="Uncompleted"
 
         //bring db
         val db = Firebase.firestore
-//        db.collection("Tasks")
-//            .get()
 
         var deleteBtn = findViewById<Button>(R.id.buttonDelete)
         deleteBtn.setOnClickListener {

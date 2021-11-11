@@ -1,17 +1,29 @@
 package com.example.to_doapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Color.red
 import android.graphics.Paint
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.recyclerview.widget.RecyclerView
+import com.example.to_doapp.R.color.*
 import com.example.to_doapp.model.Task
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.*
 
 class TaskAdapter(var data: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
 
@@ -20,11 +32,21 @@ class TaskAdapter(var data: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
         return TaskHolder(v)
     }
 
+    @SuppressLint("ResourceAsColor")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: TaskHolder, position: Int) {
         //bringing db
         val db = Firebase.firestore
         db.collection("Tasks")
             .get()
+
+        //current date
+        val current = LocalDateTime.now()
+        var day = "${current.dayOfMonth}/${current.month.value}/${current.year}"
+        val sdf = SimpleDateFormat("dd/MM/yyyy")
+        var currentFormatted = sdf.parse(day)
+        var dueDateFormatted = sdf.parse(data[position].dueDate)
+
 
         holder.tvTitle.text = data[position].title.capitalize()
         holder.tvNotes.text = data[position].notes
@@ -35,6 +57,11 @@ class TaskAdapter(var data: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
             var intent = Intent(holder.itemView.context, TaskDetails::class.java)
             intent.putExtra("task", data[position])
             holder.itemView.context.startActivity(intent)
+        }
+
+
+        if(!data[position].status && dueDateFormatted.before(currentFormatted)){
+            holder.tvDueDate.setTextColor(Color.parseColor("#FF0000"))
         }
 
         if (!data[position].status) {

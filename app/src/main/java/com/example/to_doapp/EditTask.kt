@@ -35,20 +35,20 @@ class EditTask : AppCompatActivity() {
         editTitleEditText.text = Editable.Factory.getInstance().newEditable(task.title)
 
         var editDateEditText = findViewById<EditText>(R.id.editTaskDate)
-        editDateEditText.text = Editable.Factory.getInstance().newEditable(task.dueDate)
+        editDateEditText.text = Editable.Factory.getInstance().newEditable(task.dueDate.toString())
 
         var editNotesEditText = findViewById<EditText>(R.id.editTaskNotes)
         editNotesEditText.text = Editable.Factory.getInstance().newEditable(task.notes)
 
         editDateEditText.setOnFocusChangeListener { view, b ->
             if (view.isFocused) {
-                var constraintsBuilder = CalendarConstraints.Builder()
-                    .setValidator(DateValidatorPointForward.now())
+//                var constraintsBuilder = CalendarConstraints.Builder()
+//                    .setValidator(DateValidatorPointForward.now())
                 val datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select task due date")
                     // Opens the date picker with today's date selected.
                     .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .setCalendarConstraints(constraintsBuilder.build())
+//                    .setCalendarConstraints(constraintsBuilder.build())
                     .build()
                 datePicker.show(supportFragmentManager, "date_picker")
                 datePicker.addOnPositiveButtonClickListener {
