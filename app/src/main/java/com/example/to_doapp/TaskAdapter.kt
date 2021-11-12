@@ -49,9 +49,10 @@ class TaskAdapter(var data: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
 
 
         holder.tvTitle.text = data[position].title.capitalize()
-        holder.tvNotes.text = data[position].notes
+//        holder.tvNotes.text = data[position].notes
         holder.tvDueDate.text = data[position].dueDate
-        holder.tvCreationDate.text = "Created:\n" + data[position].creationDate.toString()
+        holder.tvCreationDate.text =
+            holder.tvTitle.context.getString(R.string.created) + " " + data[position].creationDate
 
         holder.itemView.setOnClickListener {
             var intent = Intent(holder.itemView.context, TaskDetails::class.java)
@@ -60,7 +61,7 @@ class TaskAdapter(var data: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
         }
 
 
-        if(!data[position].status && dueDateFormatted.before(currentFormatted)){
+        if (!data[position].status && dueDateFormatted.before(currentFormatted)) {
             holder.tvDueDate.setTextColor(Color.parseColor("#FF0000"))
         }
 
@@ -100,7 +101,8 @@ class TaskAdapter(var data: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
 
 class TaskHolder(v: View) : RecyclerView.ViewHolder(v) {
     var tvTitle = v.findViewById<TextView>(R.id.textViewTaskTitle)
-    var tvNotes = v.findViewById<TextView>(R.id.textViewNotes)
+
+    //    var tvNotes = v.findViewById<TextView>(R.id.textViewNotes)
     var tvDueDate = v.findViewById<TextView>(R.id.textViewDate)
     var tvCreationDate = v.findViewById<TextView>(R.id.textViewCreationDate)
     var doneBtn = v.findViewById<CheckBox>(R.id.doneCheckbox)

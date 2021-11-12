@@ -8,4 +8,16 @@
     <string name="edit">Edit</string>
     <string name="save">Save</string>
     <string name="sort">Sort</string>
+    <string name="created">Created: </string>
+    <string name="completed">Completed</string>
+    <string name="uncompleted">Uncompleted</string>
+    <string name="delete">Delete?</string>
+    <string name="delete_message">Are you sure want to delete this task?</string>
+    <string name="task_deleted_successfully">Task deleted successfully</string>
+    <string name="cancel">Cancel</string>
+    <string name="task_filtered">Tasks are filtered</string>
+    <string name="sorted_message">Task are sorted now.</string>
+    <string name="tasks">Tasks</string>
+    <string name="completed_tasks">Completed Tasks</string>
+    <string name="update_message">Task updated successfully</string>
 </resources>

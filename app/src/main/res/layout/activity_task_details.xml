@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".TaskDetails">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/mdToolbar"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="?attr/colorPrimary"-->
-<!--        android:minHeight="?attr/actionBarSize"-->
-<!--        android:theme="?attr/actionBarTheme"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewTitle"
@@ -53,7 +43,7 @@
         android:layout_marginTop="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardViewTitle"
-        app:srcCompat="@drawable/date_icon" />
+        app:srcCompat="@drawable/ic_baseline_title_24" />
 
     <TextView
         android:id="@+id/textViewDetailsDate"
@@ -73,7 +63,7 @@
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:srcCompat="@drawable/status_icon" />
+        app:srcCompat="@drawable/ic_baseline_alarm_on_24" />
 
     <TextView
         android:id="@+id/textViewStatus"
@@ -93,24 +83,26 @@
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:srcCompat="@drawable/notes_icon" />
+        app:srcCompat="@drawable/ic_baseline_sticky_note_2_24" />
 
     <TextView
         android:id="@+id/textViewDetailsNotes"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
         android:text="TextView"
+        android:textAlignment="viewStart"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonDelete"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/textViewStatus" />
+        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/buttonDelete"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:text="Delete"
+        android:text="@string/delete"
         android:backgroundTint="#FF0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +113,7 @@
         android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Edit"
+        android:text="@string/edit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

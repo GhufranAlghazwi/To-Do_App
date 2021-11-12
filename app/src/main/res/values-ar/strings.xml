@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">To-Do</string>
+    <string name="filter">فرز</string>
+    <string name="task_title">عنوان المهمة</string>
+    <string name="notes">ملاحظات</string>
+    <string name="add">إضافة</string>
+    <string name="due_date">تاريخ الإستحقاق</string>
+    <string name="edit">تغيير</string>
+    <string name="save">حفظ</string>
+    <string name="sort">ترتيب</string>
+    <string name="created">أُنشئت: </string>
+    <string name="completed">مكتمل</string>
+    <string name="uncompleted">غير مكتمل</string>
+    <string name="delete">حذف</string>
+    <string name="delete_message">هل تريد الحذف؟</string>
+    <string name="task_deleted_successfully">حُذفت المهمة بنجاح</string>
+    <string name="cancel">إلغاء</string>
+    <string name="task_filtered">تم فرز المهام</string>
+    <string name="sorted_message">تم ترتيب المهام ابجديًا</string>
+    <string name="tasks">المهام</string>
+    <string name="completed_tasks">المهام المكتملة</string>
+    <string name="update_message">تم تحديث المهمة بنجاح</string>
+
+
+
+</resources>

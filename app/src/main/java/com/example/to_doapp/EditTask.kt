@@ -1,5 +1,6 @@
 package com.example.to_doapp
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.*
 
 class EditTask : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,23 +44,22 @@ class EditTask : AppCompatActivity() {
 
         editDateEditText.setOnFocusChangeListener { view, b ->
             if (view.isFocused) {
-//                var constraintsBuilder = CalendarConstraints.Builder()
-//                    .setValidator(DateValidatorPointForward.now())
-                val datePicker = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select task due date")
-                    // Opens the date picker with today's date selected.
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-//                    .setCalendarConstraints(constraintsBuilder.build())
-                    .build()
-                datePicker.show(supportFragmentManager, "date_picker")
-                datePicker.addOnPositiveButtonClickListener {
-                    var selectedDate = datePicker.headerText
-                    editDateEditText.setText(selectedDate)
-                }
-
-
+                var calendar = Calendar.getInstance()
+                var year = calendar.get(Calendar.YEAR)
+                var month = calendar.get(Calendar.MONTH)
+                var day = calendar.get(Calendar.DAY_OF_MONTH)
+                var datePicker = DatePickerDialog(
+                    this, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                        editDateEditText.setText("$dayOfMonth/${month + 1}/$year")
+                    },
+                    year,
+                    month,
+                    day
+                )
+                datePicker.getDatePicker().setMinDate(calendar.getTimeInMillis())
+                datePicker.show()
             }
-        }
+            }
 
         var editBtn = findViewById<Button>(R.id.buttonEditTask)
         editBtn.setOnClickListener {
@@ -76,7 +77,7 @@ class EditTask : AppCompatActivity() {
                             "CreationDate" to task.creationDate
                         )
                     ).addOnSuccessListener {
-                        Toast.makeText(this, "Task updated successfully", Toast.LENGTH_LONG)
+                        Toast.makeText(this, getString(R.string.update_message), Toast.LENGTH_LONG)
                             .show()
                         var intent = Intent(this, HomeActivity::class.java)
                         startActivity(intent)

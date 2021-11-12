@@ -2,29 +2,21 @@ package com.example.to_doapp
 
 import android.app.DatePickerDialog
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.to_doapp.model.Task
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
 
 class HomeActivity : AppCompatActivity() {
@@ -42,15 +34,9 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
 
-        //current date
-//        val current = LocalDateTime.now()
-//        val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-//        val currentDate = current.format(formatter).toString()
 
         val current = LocalDate.now()
         var day = "${current.dayOfMonth}/${current.month.value}/${current.year}"
-//        val sdf = SimpleDateFormat("dd/MM/yyyy")
-//        var currentFormatted = sdf.parse(day)
 
         var homeVM = HomeViewModel()
 
@@ -58,11 +44,21 @@ class HomeActivity : AppCompatActivity() {
         var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        homeVM.getAllTasks().observe(this, { list ->
+        homeVM.getUncomplete().observe(this, { list ->
             mRecyclerView.adapter = TaskAdapter(list)
-            //mRecyclerView.adapter?.notifyDataSetChanged()
 
         })
+
+        // TEST
+        var mRecyclerViewCompleted = findViewById<RecyclerView>(R.id.mRecyclerView2)
+        mRecyclerViewCompleted.layoutManager = LinearLayoutManager(this)
+        homeVM.getComplete().observe(this, { list ->
+            mRecyclerViewCompleted.adapter = TaskAdapter(list)
+
+        })
+
+
+        mRecyclerView.adapter?.notifyDataSetChanged()
 
         //Floating Btn to add task
         var fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
@@ -77,13 +73,11 @@ class HomeActivity : AppCompatActivity() {
             var date = addTaskDialogView.findViewById<EditText>(R.id.inputDueDate)
             date.setOnFocusChangeListener { view, b ->
                 if (view.isFocused) {
-                    var constraintsBuilder = CalendarConstraints.Builder()
-                        .setValidator(DateValidatorPointForward.now())
                     var calendar = Calendar.getInstance()
                     var year = calendar.get(Calendar.YEAR)
                     var month = calendar.get(Calendar.MONTH)
                     var day = calendar.get(Calendar.DAY_OF_MONTH)
-                    val datePicker = DatePickerDialog(
+                    var datePicker = DatePickerDialog(
                         this, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                             date.setText("$dayOfMonth/${month + 1}/$year")
                         },
@@ -91,17 +85,11 @@ class HomeActivity : AppCompatActivity() {
                         month,
                         day
                     )
+                    datePicker.getDatePicker().setMinDate(calendar.getTimeInMillis())
                     datePicker.show()
+
                 }
-                        // Opens the date picker with today's date selected.
-//                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-//                        .setCalendarConstraints(constraintsBuilder.build())
-//                        .build()
-//                    datePicker.show(supportFragmentManager, "date_picker")
-//                    datePicker.addOnPositiveButtonClickListener {
-//                        var selectedDate = datePicker.headerText
-//
-//                    }
+
             }
 
             var dialogAddButton = addTaskDialogView.findViewById<Button>(R.id.buttonAdd)
@@ -157,30 +145,45 @@ class HomeActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+
     //Sort and Filter in toolbar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var homeVM = HomeViewModel()
+
 
         //identify RV layout
         var mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
 
+        var mRecyclerView2 = findViewById<RecyclerView>(R.id.mRecyclerView2)
+        mRecyclerView2.layoutManager = LinearLayoutManager(this)
+
+        mRecyclerView.adapter?.notifyDataSetChanged()
+
         when (item.itemId) {
 
             R.id.filter_item -> {
-                homeVM.filterUncompleted().observe(this, { list ->
+                homeVM.getUncomplete().observe(this, { list ->
                     mRecyclerView.adapter = TaskAdapter(list)
+                    mRecyclerView.adapter?.notifyDataSetChanged()
                 })
-
-                Toast.makeText(this, "Task filtered", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.task_filtered), Toast.LENGTH_SHORT).show()
+                return true
             }
+
             R.id.sort_item -> {
-                homeVM.sortTask().observe(this, { list ->
+                homeVM.sortUnompleteTask().observe(this, { list ->
                     mRecyclerView.adapter = TaskAdapter(list)
-                })
 
-                Toast.makeText(this, "Task are sorted now.", Toast.LENGTH_SHORT).show()
+                })
+                homeVM.sortCompleteTask().observe(this, { list ->
+                    mRecyclerView2.adapter = TaskAdapter(list)
+
+                })
+                //Toast.makeText(this, getString(R.string.sorted_message), Toast.LENGTH_SHORT).show()
+                return true
             }
+
         }
         return super.onOptionsItemSelected(item)
     }

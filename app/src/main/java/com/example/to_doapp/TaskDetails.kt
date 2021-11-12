@@ -40,9 +40,9 @@ class TaskDetails : AppCompatActivity() {
         notes.text = task.notes
 
         if (task.status)
-            status.text="Completed"
+            status.text=getString(R.string.completed)
         else
-            status.text="Uncompleted"
+            status.text=getString(R.string.uncompleted)
 
         //bring db
         val db = Firebase.firestore
@@ -50,17 +50,17 @@ class TaskDetails : AppCompatActivity() {
         var deleteBtn = findViewById<Button>(R.id.buttonDelete)
         deleteBtn.setOnClickListener {
             val mDialog = BottomSheetMaterialDialog.Builder(this)
-                .setTitle("Delete?")
-                .setMessage("Are you sure want to delete this file?")
+                .setTitle(getString(R.string.delete))
+                .setMessage(getString(R.string.delete_message))
                 .setCancelable(false)
                 .setPositiveButton(
-                    "Delete", R.drawable.ic_baseline_delete_white
+                    getString(R.string.delete), R.drawable.ic_baseline_delete_white
                 ) { dialogInterface, which ->
                     // Delete Operation
                     db.collection("Tasks").document(task.id!!)
                         .delete()
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Task deleted successfully", Toast.LENGTH_SHORT)
+                            Toast.makeText(this, getString(R.string.task_deleted_successfully), Toast.LENGTH_SHORT)
                                 .show()
                         }
                         .addOnFailureListener { e ->
@@ -69,7 +69,7 @@ class TaskDetails : AppCompatActivity() {
                     finish()
                 }
                 .setNegativeButton(
-                    "Cancel", R.drawable.ic_baseline_close_red
+                    getString(R.string.cancel), R.drawable.ic_baseline_close_red
                 ) { dialogInterface, which -> dialogInterface.dismiss() }
                 .build()
 

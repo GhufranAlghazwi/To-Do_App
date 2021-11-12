@@ -6,11 +6,13 @@
         android:id="@+id/sort_item"
         android:icon="@drawable/ic_baseline_sort_by_alpha_24"
         android:title="@string/sort"
+        android:checkable="true"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/filter_item"
         android:icon="@drawable/ic_baseline_filter_alt_24"
         android:title="@string/filter"
+        android:checked="true"
         app:showAsAction="always" />
 </menu>
